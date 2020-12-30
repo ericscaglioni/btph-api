@@ -1,6 +1,6 @@
-import { mockAddMessageParams } from './../../../../domain/test'
-import { AddMessageRepository } from '../../../protocols/db/message'
-import { mockAddMessageRepository } from '../../../test'
+import { AddMessageRepository } from '@/data/protocols/db/message'
+import { mockAddMessageRepository } from '@/data/test'
+import { mockAddMessageParams } from '@/domain/test'
 import { DbAddMessage } from './db-add-message'
 
 type SutTypes = {

@@ -1,5 +1,5 @@
-import { AddMessageParams } from '../../domain/usecases/message/add-message'
-import { AddMessageRepository } from './../protocols/db/message'
+import { AddMessageRepository } from '@/data/protocols/db/message'
+import { AddMessageParams } from '@/domain/usecases/message/add-message'
 
 export const mockAddMessageRepository = (): AddMessageRepository => {
   class AddMessageRepositoryStub implements AddMessageRepository {

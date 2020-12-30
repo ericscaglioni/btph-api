@@ -1,4 +1,4 @@
-import { AddMessageParams } from '../usecases/message/add-message'
+import { AddMessageParams } from '@/domain/usecases/message/add-message'
 
 export const mockAddMessageParams = (): AddMessageParams => ({
   name: 'any_name',
