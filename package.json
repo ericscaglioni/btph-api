@@ -4,7 +4,8 @@
   "description": "API de mensagens do quadro Both Teams Played Hard do blog de NBA, Bola Presa",
   "main": "index.js",
   "scripts": {
-    "test": "jest"
+    "test": "jest --passWithNoTests --silent --runInBand",
+    "test:unit": "npm test -- --watch -c jest-unit-config.js"
   },
   "keywords": [],
   "author": "",
