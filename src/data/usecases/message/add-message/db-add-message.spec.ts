@@ -1,20 +1,27 @@
+import { mockAddMessageParams } from './../../../../domain/test'
 import { AddMessageRepository } from '../../../protocols/db/message'
-import { AddMessageParams } from './../../../../domain/usecases/message/add-message'
+import { mockAddMessageRepository } from '../../../test'
 import { DbAddMessage } from './db-add-message'
+
+type SutTypes = {
+  sut: DbAddMessage
+  addMessageRepositoryStub: AddMessageRepository
+}
+
+const makeSut = (): SutTypes => {
+  const addMessageRepositoryStub = mockAddMessageRepository()
+  const sut = new DbAddMessage(addMessageRepositoryStub)
+  return {
+    sut,
+    addMessageRepositoryStub
+  }
+}
 
 describe('DbAddMessage usecase', () => {
   it('Should call AddMessageRepository with correct data', async () => {
-    class AddMessageRepositoryStub implements AddMessageRepository {
-      async add (message: AddMessageParams): Promise<void> {}
-    }
-    const addMessageRepositoryStub = new AddMessageRepositoryStub()
-    const sut = new DbAddMessage(addMessageRepositoryStub)
+    const { sut, addMessageRepositoryStub } = makeSut()
     const addSpy = jest.spyOn(addMessageRepositoryStub, 'add')
-    const addMessageParams = {
-      name: 'any_name',
-      message: 'any_message'
-    }
-    await sut.add(addMessageParams)
-    expect(addSpy).toHaveBeenCalledWith(addMessageParams)
+    await sut.add(mockAddMessageParams())
+    expect(addSpy).toHaveBeenCalledWith(mockAddMessageParams())
   })
 })
