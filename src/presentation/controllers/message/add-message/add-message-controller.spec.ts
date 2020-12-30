@@ -1,20 +1,42 @@
+
 import { MissingParamError } from '@/presentation/errors'
 import { badRequest } from '@/presentation/helpers/http/http-helper'
+import { mockAddMessage } from '@/presentation/test'
 import faker from 'faker'
 import { AddMessageController } from './add-message-controller'
+import { AddMessage, HttpRequest } from './add-message-controller-protocols'
+import MockDate from 'mockdate'
+
+const mockRequest = (): HttpRequest => ({
+  body: {
+    name: faker.name.findName(),
+    message: faker.lorem.paragraphs(3)
+  }
+})
 
 type SutTypes = {
   sut: AddMessageController
+  addMessageStub: AddMessage
 }
 
 const makeSut = (): SutTypes => {
-  const sut = new AddMessageController()
+  const addMessageStub = mockAddMessage()
+  const sut = new AddMessageController(addMessageStub)
   return {
-    sut
+    sut,
+    addMessageStub
   }
 }
 
 describe('Add Message Controller', () => {
+  beforeAll(() => {
+    MockDate.set(new Date())
+  })
+
+  afterAll(() => {
+    MockDate.reset()
+  })
+
   it('Should return 400 if name is not provided', async () => {
     const { sut } = makeSut()
     const httpRequest = {
@@ -35,5 +57,18 @@ describe('Add Message Controller', () => {
     }
     const httpResponse = await sut.handle(httpRequest)
     expect(httpResponse).toEqual(badRequest(new MissingParamError('message')))
+  })
+
+  it('Should call AddMessage with correct data', async () => {
+    const { sut, addMessageStub } = makeSut()
+    const addSpy = jest.spyOn(addMessageStub, 'add')
+    const httpRequest = mockRequest()
+    await sut.handle(httpRequest)
+    expect(addSpy).toHaveBeenCalledWith({
+      name: httpRequest.body.name,
+      message: httpRequest.body.message,
+      date: new Date(),
+      read: false
+    })
   })
 })
