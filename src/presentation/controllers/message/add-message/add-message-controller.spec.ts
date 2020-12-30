@@ -1,11 +1,11 @@
 
 import { MissingParamError } from '@/presentation/errors'
-import { badRequest } from '@/presentation/helpers/http/http-helper'
+import { badRequest, serverError } from '@/presentation/helpers/http/http-helper'
 import { mockAddMessage } from '@/presentation/test'
 import faker from 'faker'
+import MockDate from 'mockdate'
 import { AddMessageController } from './add-message-controller'
 import { AddMessage, HttpRequest } from './add-message-controller-protocols'
-import MockDate from 'mockdate'
 
 const mockRequest = (): HttpRequest => ({
   body: {
@@ -70,5 +70,14 @@ describe('Add Message Controller', () => {
       date: new Date(),
       read: false
     })
+  })
+
+  it('Should return 500 if AddMessage throws', async () => {
+    const { sut, addMessageStub } = makeSut()
+    jest.spyOn(addMessageStub, 'add').mockImplementationOnce(() => {
+      throw new Error()
+    })
+    const httpResponse = await sut.handle(mockRequest())
+    expect(httpResponse).toEqual(serverError(new Error()))
   })
 })
