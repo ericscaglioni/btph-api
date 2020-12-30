@@ -24,4 +24,13 @@ describe('DbAddMessage usecase', () => {
     await sut.add(mockAddMessageParams())
     expect(addSpy).toHaveBeenCalledWith(mockAddMessageParams())
   })
+
+  it('Should throw if AddMessageRepository throws', async () => {
+    const { sut, addMessageRepositoryStub } = makeSut()
+    jest.spyOn(addMessageRepositoryStub, 'add').mockImplementationOnce(() => {
+      throw new Error()
+    })
+    const promise = sut.add(mockAddMessageParams())
+    await expect(promise).rejects.toThrow()
+  })
 })
