@@ -1,5 +1,4 @@
-import { AddMessageRepository } from '@/data/protocols/db/message'
-import { AddMessage, AddMessageParams } from '@/domain/usecases/message/add-message'
+import { AddMessage, AddMessageParams, AddMessageRepository } from './db-add-message-protocols'
 
 export class DbAddMessage implements AddMessage {
   constructor (private readonly addMessageRepository: AddMessageRepository) {}
