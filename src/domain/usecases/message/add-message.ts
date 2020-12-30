@@ -1,4 +1,4 @@
-type AddMessageParams = {
+export type AddMessageParams = {
   name: string
   message: string
 }
