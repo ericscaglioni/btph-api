@@ -1,5 +1,5 @@
 import { MissingParamError } from '@/presentation/errors/missing-param-error'
-import { badRequest, serverError } from '@/presentation/helpers/http/http-helper'
+import { badRequest, noContent, serverError } from '@/presentation/helpers/http/http-helper'
 import { AddMessage, Controller, HttpRequest, HttpResponse } from './add-message-controller-protocols'
 
 export class AddMessageController implements Controller {
@@ -20,7 +20,7 @@ export class AddMessageController implements Controller {
         date: new Date(),
         read: false
       })
-      return null
+      return noContent()
     } catch (error) {
       return serverError(error)
     }
