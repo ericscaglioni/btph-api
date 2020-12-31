@@ -26,6 +26,15 @@ describe('Message routes', () => {
   })
 
   describe('POST /messages', () => {
+    it('Should return 400 if name is not provided', async () => {
+      await request(app)
+        .post('/api/messages')
+        .send({
+          message: faker.lorem.paragraphs(4)
+        })
+        .expect(400)
+    })
+
     it('Should return 204 on success', async () => {
       const mockedMessage = mockMessage()
       await request(app)
