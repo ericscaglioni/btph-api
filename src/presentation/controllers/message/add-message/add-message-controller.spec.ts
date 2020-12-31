@@ -1,10 +1,9 @@
-import { MissingParamError } from '@/presentation/errors'
-import { badRequest, noContent, serverError } from '@/presentation/helpers/http/http-helper'
-import { mockAddMessage } from '@/presentation/test'
+import { noContent, serverError } from '@/presentation/helpers/http/http-helper'
+import { mockAddMessage, mockValidation } from '@/presentation/test'
 import faker from 'faker'
 import MockDate from 'mockdate'
 import { AddMessageController } from './add-message-controller'
-import { AddMessage, HttpRequest } from './add-message-controller-protocols'
+import { AddMessage, HttpRequest, Validation } from './add-message-controller-protocols'
 
 const mockRequest = (): HttpRequest => ({
   body: {
@@ -16,14 +15,17 @@ const mockRequest = (): HttpRequest => ({
 type SutTypes = {
   sut: AddMessageController
   addMessageStub: AddMessage
+  validationStub: Validation
 }
 
 const makeSut = (): SutTypes => {
   const addMessageStub = mockAddMessage()
-  const sut = new AddMessageController(addMessageStub)
+  const validationStub = mockValidation()
+  const sut = new AddMessageController(addMessageStub, validationStub)
   return {
     sut,
-    addMessageStub
+    addMessageStub,
+    validationStub
   }
 }
 
@@ -36,26 +38,12 @@ describe('Add Message Controller', () => {
     MockDate.reset()
   })
 
-  it('Should return 400 if name is not provided', async () => {
-    const { sut } = makeSut()
-    const httpRequest = {
-      body: {
-        message: faker.lorem.paragraphs(3)
-      }
-    }
-    const httpResponse = await sut.handle(httpRequest)
-    expect(httpResponse).toEqual(badRequest(new MissingParamError('name')))
-  })
-
-  it('Should return 400 if message is not provided', async () => {
-    const { sut } = makeSut()
-    const httpRequest = {
-      body: {
-        name: faker.name.findName()
-      }
-    }
-    const httpResponse = await sut.handle(httpRequest)
-    expect(httpResponse).toEqual(badRequest(new MissingParamError('message')))
+  test('Should call Validation with correct data', async () => {
+    const { sut, validationStub } = makeSut()
+    const validateSpy = jest.spyOn(validationStub, 'validate')
+    const httpRequest = mockRequest()
+    await sut.handle(httpRequest)
+    expect(validateSpy).toHaveBeenCalledWith(httpRequest.body)
   })
 
   it('Should call AddMessage with correct data', async () => {
