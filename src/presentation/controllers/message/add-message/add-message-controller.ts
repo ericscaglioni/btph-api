@@ -1,4 +1,4 @@
-import { noContent, serverError } from '@/presentation/helpers/http/http-helper'
+import { badRequest, noContent, serverError } from '@/presentation/helpers/http/http-helper'
 import { AddMessage, Controller, HttpRequest, HttpResponse, Validation } from './add-message-controller-protocols'
 
 export class AddMessageController implements Controller {
@@ -9,7 +9,10 @@ export class AddMessageController implements Controller {
 
   async handle (httpRequest: HttpRequest): Promise<HttpResponse> {
     try {
-      this.validation.validate(httpRequest.body)
+      const error = this.validation.validate(httpRequest.body)
+      if (error) {
+        return badRequest(error)
+      }
       const { name, message } = httpRequest.body
       await this.addMessage.add({
         name,
