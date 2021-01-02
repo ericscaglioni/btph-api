@@ -24,27 +24,10 @@ services:
       - "9222:9222"
     links:
       - mongo
-  # btph-messages-api:
-  #   container_name: btph-messages-api-container
-  #   build: .
-  #   image: btph-messages-api
-  #   working_dir: /usr/src/btph-messages-api
-  #   environment: 
-  #     - MONGO_URL=mongodb://mongo:27017/btph-messages-api
-  #   restart: always
-  #   command: bash -c "npm install --only=prod && npm run start:debug"
-  #   volumes:
-  #     - ./dist/:/usr/src/btph-messages-api/dist/
-  #     - ./package.json:/usr/src/btph-messages-api/package.json
-  #   ports:
-  #     - "5050:5050"
-  #     - "9222:9222"
-  #   links:
-  #     - mongo
-  # mongo-express:
-  #   container_name: mongodb-express-container
-  #   image: mongo-express
-  #   ports:
-  #     - "8081:8081"
-  #   links:
-  #     - mongo
+  mongo-express:
+    container_name: mongodb-express-container
+    image: mongo-express
+    ports:
+      - "8081:8081"
+    links:
+      - mongo
