@@ -1,10 +1,10 @@
 # **BTPH Messages API**
 
-## API de mensagens do quadro BTPH do blog [Bola Presa](www.bolapresa.com.br)
+## API de mensagens do quadro BTPH do blog [Bola Presa](https://bolapresa.com.br/)
 ---
 
 > ## O que ela faz?
-- API responsável por salvar e listar todas as mensagens recebidas do quadro Both Teams Played Hard do maior blog brasileiro sobre NBA, o [Bola Presa](www.bolapresa.com.br)
+- API responsável por salvar e listar todas as mensagens recebidas do quadro Both Teams Played Hard do maior blog brasileiro sobre NBA, o [Bola Presa](https://bolapresa.com.br/)
 
 > ## Requisitos da aplicação
 - [node.js](https://nodejs.org/en/)
