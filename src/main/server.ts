@@ -10,6 +10,6 @@ import env from './config/environment'
 MongoHelper.connect(env.mongodb.url)
   .then(async () => {
     const app = (await import('./config/app')).default
-    app.listen(env.port, env.host, () => console.log(`Server running at ${env.host}:${env.port}`))
+    app.listen(env.port, () => console.log(`Server running at http//localhost:${env.port}`))
   })
   .catch(console.error)
