@@ -1,6 +1,6 @@
 import { MessageModel } from '@/domain/models/message'
-import { LoadMessageParams } from '@/domain/usecases/message/load-messages'
+import { LoadMessagesParams } from '@/domain/usecases/message/load-messages'
 
 export interface LoadMessagesRepository {
-  load (message: LoadMessageParams): Promise<MessageModel[]>
+  load (message: LoadMessagesParams): Promise<MessageModel[]>
 }
