@@ -1,7 +1,7 @@
-import { LoadMessagesRepository } from '@/data/protocols/db/message'
 import { mockLoadMessagesRepository } from '@/data/test'
 import { mockLoadMessagesParams } from '@/domain/test'
 import { DbLoadMessages } from './db-load-messages'
+import { LoadMessagesRepository } from './db-load-messages-protocols'
 
 type SutTypes = {
   sut: DbLoadMessages

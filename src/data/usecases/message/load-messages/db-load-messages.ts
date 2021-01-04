@@ -1,6 +1,4 @@
-import { LoadMessagesRepository } from '@/data/protocols/db/message/load-messages-repository'
-import { MessageModel } from '@/domain/models/message'
-import { LoadMessages, LoadMessagesParams } from '@/domain/usecases/message/load-messages'
+import { LoadMessages, LoadMessagesParams, LoadMessagesRepository, MessageModel } from './db-load-messages-protocols'
 
 export class DbLoadMessages implements LoadMessages {
   constructor (private readonly loadMessagesRepository: LoadMessagesRepository) {}
