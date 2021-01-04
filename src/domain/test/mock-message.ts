@@ -5,12 +5,11 @@ import { MessageModel } from '../models/message'
 
 const name = faker.name.findName()
 const message = faker.lorem.paragraphs(3)
-const date = faker.date.recent()
 
 export const mockAddMessageParams = (): AddMessageParams => ({
   name,
   message,
-  date,
+  date: new Date(),
   read: false
 })
 
