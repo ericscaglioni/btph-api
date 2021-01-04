@@ -1,6 +1,6 @@
 import { mockMessageModels } from '@/domain/test'
 import { LoadMessages } from '@/domain/usecases/message/load-messages'
-import { serverError, ok } from '@/presentation/helpers/http/http-helper'
+import { noContent, ok, serverError } from '@/presentation/helpers/http/http-helper'
 import { HttpRequest } from '@/presentation/protocols'
 import { mockLoadMessages } from '@/presentation/test'
 import faker from 'faker'
@@ -69,5 +69,12 @@ describe('Load Messages Controller', () => {
     const { sut } = makeSut()
     const httpResponse = await sut.handle(mockRequest())
     expect(httpResponse).toEqual(ok(mockMessageModels()))
+  })
+
+  it('Should return 204 if LoadMessages returns an empty array', async () => {
+    const { sut, loadMessagesStub } = makeSut()
+    jest.spyOn(loadMessagesStub, 'load').mockResolvedValueOnce([])
+    const httpResponse = await sut.handle(mockRequest())
+    expect(httpResponse).toEqual(noContent())
   })
 })

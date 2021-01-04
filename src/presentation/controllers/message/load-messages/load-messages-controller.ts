@@ -1,5 +1,5 @@
 import { LoadMessages } from '@/domain/usecases/message/load-messages'
-import { ok, serverError } from '@/presentation/helpers/http/http-helper'
+import { noContent, ok, serverError } from '@/presentation/helpers/http/http-helper'
 import { Controller, HttpRequest, HttpResponse } from '@/presentation/protocols'
 
 export class LoadMessagesController implements Controller {
@@ -21,7 +21,7 @@ export class LoadMessagesController implements Controller {
         read,
         pagination
       })
-      return ok(messages)
+      return messages.length ? ok(messages) : noContent()
     } catch (error) {
       return serverError(error)
     }
