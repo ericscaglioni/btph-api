@@ -34,4 +34,10 @@ describe('DbLoadMessages usecase', () => {
     const promise = sut.load(mockLoadMessagesParams())
     await expect(promise).rejects.toThrow()
   })
+
+  it('Should return messages on success', async () => {
+    const { sut } = makeSut()
+    const messages = await sut.load(mockLoadMessagesParams())
+    expect(messages).toBeTruthy()
+  })
 })

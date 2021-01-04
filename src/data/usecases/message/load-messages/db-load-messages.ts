@@ -6,7 +6,7 @@ export class DbLoadMessages implements LoadMessages {
   constructor (private readonly loadMessagesRepository: LoadMessagesRepository) {}
 
   async load (data: LoadMessagesParams): Promise<MessageModel[]> {
-    await this.loadMessagesRepository.load(data)
-    return null
+    const messages = await this.loadMessagesRepository.load(data)
+    return messages
   }
 }
