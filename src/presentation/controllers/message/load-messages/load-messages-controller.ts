@@ -1,4 +1,4 @@
-import { LoadMessages } from '@/domain/usecases/message/load-messages'
+import { LoadMessages } from './load-messages-controller-protocols'
 import { noContent, ok, serverError } from '@/presentation/helpers/http/http-helper'
 import { Controller, HttpRequest, HttpResponse } from '@/presentation/protocols'
 

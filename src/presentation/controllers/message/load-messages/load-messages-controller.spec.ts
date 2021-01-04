@@ -1,11 +1,11 @@
 import { mockMessageModels } from '@/domain/test'
-import { LoadMessages } from '@/domain/usecases/message/load-messages'
 import { noContent, ok, serverError } from '@/presentation/helpers/http/http-helper'
 import { HttpRequest } from '@/presentation/protocols'
 import { mockLoadMessages } from '@/presentation/test'
 import faker from 'faker'
 import MockDate from 'mockdate'
 import { LoadMessagesController } from './load-messages-controller'
+import { LoadMessages } from './load-messages-controller-protocols'
 
 const mockRequest = (): HttpRequest => ({
   query: {
