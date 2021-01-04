@@ -1,4 +1,5 @@
 import { LoadMessages } from '@/domain/usecases/message/load-messages'
+import { serverError } from '@/presentation/helpers/http/http-helper'
 import { HttpRequest } from '@/presentation/protocols'
 import { mockLoadMessages } from '@/presentation/test'
 import faker from 'faker'
@@ -52,5 +53,14 @@ describe('Load Messages Controller', () => {
         offset: httpRequest.query.offset
       }
     })
+  })
+
+  it('Should return 500 if LoadMessages throws', async () => {
+    const { sut, loadMessagesStub } = makeSut()
+    jest.spyOn(loadMessagesStub, 'load').mockImplementationOnce(() => {
+      throw new Error()
+    })
+    const httpResponse = await sut.handle(mockRequest())
+    expect(httpResponse).toEqual(serverError(new Error()))
   })
 })
