@@ -5,7 +5,7 @@ type Pagination = {
   offset: number
 }
 
-export type LoadMessageParams = {
+export type LoadMessagesParams = {
   initialDate: Date
   finalDate: Date
   read: boolean
@@ -13,5 +13,5 @@ export type LoadMessageParams = {
 }
 
 export interface LoadMessages {
-  load (data: LoadMessageParams): Promise<MessageModel[]>
+  load (data: LoadMessagesParams): Promise<MessageModel[]>
 }
