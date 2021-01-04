@@ -1,5 +1,5 @@
 import { LoadMessages } from '@/domain/usecases/message/load-messages'
-import { serverError } from '@/presentation/helpers/http/http-helper'
+import { ok, serverError } from '@/presentation/helpers/http/http-helper'
 import { Controller, HttpRequest, HttpResponse } from '@/presentation/protocols'
 
 export class LoadMessagesController implements Controller {
@@ -15,12 +15,13 @@ export class LoadMessagesController implements Controller {
         offset
       } = httpRequest.query
       const pagination = { limit, offset }
-      await this.loadMessages.load({
+      const messages = await this.loadMessages.load({
         initialDate,
         finalDate,
         read,
         pagination
       })
+      return ok(messages)
     } catch (error) {
       return serverError(error)
     }

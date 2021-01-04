@@ -5,6 +5,8 @@ import { MessageModel } from '../models/message'
 
 const name = faker.name.findName()
 const message = faker.lorem.paragraphs(3)
+const id = faker.random.uuid()
+const id2 = faker.random.uuid()
 
 export const mockAddMessageParams = (): AddMessageParams => ({
   name,
@@ -14,10 +16,10 @@ export const mockAddMessageParams = (): AddMessageParams => ({
 })
 
 export const mockMessageModels = (): MessageModel[] => ([{
-  id: faker.random.uuid(),
+  id,
   ...mockAddMessageParams()
 }, {
-  id: faker.random.uuid(),
+  id: id2,
   ...mockAddMessageParams()
 }])
 
