@@ -3,10 +3,8 @@ import faker from 'faker'
 
 export const mockDecrypter = (): Decrypter => {
   class DecrypterStub implements Decrypter {
-    async decrypt (token: string): Promise<object> {
-      return {
-        id: faker.random.uuid()
-      }
+    async decrypt (token: string): Promise<string> {
+      return faker.random.uuid()
     }
   }
   return new DecrypterStub()

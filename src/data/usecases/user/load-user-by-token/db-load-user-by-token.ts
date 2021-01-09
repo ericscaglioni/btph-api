@@ -6,7 +6,11 @@ export class DbLoadUserByToken implements LoadUserByToken {
   constructor (private readonly decrypter: Decrypter) {}
 
   async loadByToken (accessToken: string): Promise<UserModel> {
-    await this.decrypter.decrypt(accessToken)
+    try {
+      await this.decrypter.decrypt(accessToken)
+    } catch (error) {
+      return null
+    }
     return null
   }
 }

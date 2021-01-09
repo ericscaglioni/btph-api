@@ -25,4 +25,20 @@ describe('DbLoadUserByToken usescase', () => {
     await sut.loadByToken(userId)
     expect(decryptSpy).toHaveBeenCalledWith(userId)
   })
+
+  it('Should return null if Decrypter returns null', async () => {
+    const { sut, decrypterStub } = makeSut()
+    jest.spyOn(decrypterStub, 'decrypt').mockResolvedValueOnce(null)
+    const user = await sut.loadByToken(faker.random.uuid())
+    expect(user).toBeNull()
+  })
+
+  it('Should return null if Decrypter throws', async () => {
+    const { sut, decrypterStub } = makeSut()
+    jest.spyOn(decrypterStub, 'decrypt').mockImplementationOnce(() => {
+      throw new Error()
+    })
+    const user = await sut.loadByToken(faker.random.uuid())
+    expect(user).toBeNull()
+  })
 })
