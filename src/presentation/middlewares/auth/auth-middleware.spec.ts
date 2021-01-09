@@ -1,6 +1,6 @@
 import { LoadUserByToken } from '@/domain/usecases/user/load-user-by-token'
 import { AccessDeniedError } from '@/presentation/errors'
-import { forbidden, unauthorized } from '@/presentation/helpers/http/http-helper'
+import { forbidden, noContent, unauthorized } from '@/presentation/helpers/http/http-helper'
 import { HttpRequest } from '@/presentation/protocols'
 import { mockLoadUserByToken } from '@/presentation/test'
 import faker from 'faker'
@@ -46,5 +46,11 @@ describe('Auth Middleware', () => {
     jest.spyOn(loadUserByTokenStub, 'loadByToken').mockResolvedValueOnce(null)
     const httpResponse = await sut.handle(mockRequest())
     expect(httpResponse).toEqual(forbidden(new AccessDeniedError()))
+  })
+
+  it('Should return 204 if LoadUserByToken returns an user', async () => {
+    const { sut } = makeSut()
+    const httpResponse = await sut.handle(mockRequest())
+    expect(httpResponse).toEqual(noContent())
   })
 })

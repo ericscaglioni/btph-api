@@ -1,6 +1,6 @@
 import { LoadUserByToken } from '@/domain/usecases/user/load-user-by-token'
 import { AccessDeniedError } from '@/presentation/errors'
-import { forbidden, unauthorized } from '@/presentation/helpers/http/http-helper'
+import { forbidden, noContent, unauthorized } from '@/presentation/helpers/http/http-helper'
 import { HttpRequest, HttpResponse, Middleware } from '@/presentation/protocols'
 
 export class AuthMiddleware implements Middleware {
@@ -13,6 +13,7 @@ export class AuthMiddleware implements Middleware {
       if (!user) {
         return forbidden(new AccessDeniedError())
       }
+      return noContent()
     }
     return unauthorized()
   }
