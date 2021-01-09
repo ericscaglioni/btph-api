@@ -1,3 +1,4 @@
+import MockDate from 'mockdate'
 import { mockAddMessageRepository } from '@/data/test'
 import { mockAddMessageParams } from '@/domain/test'
 import { DbAddMessage } from './db-add-message'
@@ -18,6 +19,14 @@ const makeSut = (): SutTypes => {
 }
 
 describe('DbAddMessage usecase', () => {
+  beforeAll(() => {
+    MockDate.set(new Date())
+  })
+
+  afterAll(() => {
+    MockDate.reset()
+  })
+
   it('Should call AddMessageRepository with correct data', async () => {
     const { sut, addMessageRepositoryStub } = makeSut()
     const addSpy = jest.spyOn(addMessageRepositoryStub, 'add')
