@@ -17,7 +17,8 @@ export class DbLoadUserByToken implements LoadUserByToken {
       return null
     }
     if (userId) {
-      await this.loadUserByIdRepository.loadById(userId)
+      const user = await this.loadUserByIdRepository.loadById(userId)
+      return user
     }
     return null
   }

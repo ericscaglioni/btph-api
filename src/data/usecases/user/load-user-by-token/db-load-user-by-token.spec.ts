@@ -59,4 +59,23 @@ describe('DbLoadUserByToken usescase', () => {
     const user = await sut.loadByToken(faker.random.uuid())
     expect(user).toBeNull()
   })
+
+  it('Should throw if LoadUserByIdRepository throws', async () => {
+    const { sut, loadUserByIdRepositoryStub } = makeSut()
+    jest.spyOn(loadUserByIdRepositoryStub, 'loadById').mockImplementationOnce(() => {
+      throw new Error()
+    })
+    const promise = sut.loadByToken(faker.random.uuid())
+    await expect(promise).rejects.toThrow()
+  })
+
+  it('Should return an user on success', async () => {
+    const { sut } = makeSut()
+    const user = await sut.loadByToken(faker.random.uuid())
+    expect(user).toBeTruthy()
+    expect(user).toHaveProperty('id')
+    expect(user).toHaveProperty('name')
+    expect(user).toHaveProperty('email')
+    expect(user).toHaveProperty('password')
+  })
 })
