@@ -42,13 +42,13 @@ describe('Message Mongo Repository', () => {
   })
 
   describe('load()', () => {
-    it('Should return messages based on limit', async () => {
+    it.only('Should return messages based on limit', async () => {
       const addMessageModels = [mockAddMessageParams(), mockAddMessageParams(), mockAddMessageParams()]
       await messageCollection.insertMany(addMessageModels)
       const sut = makeSut()
       const loadMessageParams = {
-        initialDate: new Date('2021-01-01'),
-        finalDate: new Date('2021-01-08'),
+        initialDate: new Date(),
+        finalDate: new Date(),
         read: false,
         pagination: {
           limit: 2,
@@ -65,8 +65,8 @@ describe('Message Mongo Repository', () => {
       await messageCollection.insertMany(addMessageModels)
       const sut = makeSut()
       const loadMessageParams = {
-        initialDate: new Date('2021-01-01'),
-        finalDate: new Date('2021-01-08'),
+        initialDate: new Date(),
+        finalDate: new Date(),
         read: false,
         pagination: {
           limit: 2,
@@ -78,15 +78,15 @@ describe('Message Mongo Repository', () => {
       expect(messages).toHaveLength(1)
     })
 
-    it('Should return messages read messages', async () => {
+    it('Should return read messages', async () => {
       const readMessage = mockAddMessageParams()
       readMessage.read = true
       const addMessageModels = [mockAddMessageParams(), readMessage, mockAddMessageParams()]
       await messageCollection.insertMany(addMessageModels)
       const sut = makeSut()
       const loadMessageParams = {
-        initialDate: new Date('2021-01-01'),
-        finalDate: new Date('2021-01-08'),
+        initialDate: new Date(),
+        finalDate: new Date(),
         read: true,
         pagination: {
           limit: 10,
