@@ -1,19 +1,23 @@
 import { Decrypter } from '@/data/protocols/criptography'
-import { mockDecrypter } from '@/data/test'
+import { LoadUserByIdRepository } from '@/data/protocols/db/user'
+import { mockDecrypter, mockLoadUserByIdRepository } from '@/data/test'
 import faker from 'faker'
 import { DbLoadUserByToken } from './db-load-user-by-token'
 
 type SutTypes = {
   sut: DbLoadUserByToken
   decrypterStub: Decrypter
+  loadUserByIdRepositoryStub: LoadUserByIdRepository
 }
 
 const makeSut = (): SutTypes => {
   const decrypterStub = mockDecrypter()
-  const sut = new DbLoadUserByToken(decrypterStub)
+  const loadUserByIdRepositoryStub = mockLoadUserByIdRepository()
+  const sut = new DbLoadUserByToken(decrypterStub, loadUserByIdRepositoryStub)
   return {
     sut,
-    decrypterStub
+    decrypterStub,
+    loadUserByIdRepositoryStub
   }
 }
 
@@ -40,5 +44,12 @@ describe('DbLoadUserByToken usescase', () => {
     })
     const user = await sut.loadByToken(faker.random.uuid())
     expect(user).toBeNull()
+  })
+
+  it('Should call LoadUserByIdRepository with correct id', async () => {
+    const { sut, loadUserByIdRepositoryStub } = makeSut()
+    const loadByIdSpy = jest.spyOn(loadUserByIdRepositoryStub, 'loadById')
+    await sut.loadByToken(faker.random.uuid())
+    expect(loadByIdSpy).toHaveBeenCalledWith('any_user_id')
   })
 })
