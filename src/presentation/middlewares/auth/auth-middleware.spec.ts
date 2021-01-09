@@ -1,10 +1,9 @@
-import { LoadUserByToken } from '@/domain/usecases/user/load-user-by-token'
 import { AccessDeniedError } from '@/presentation/errors'
 import { forbidden, noContent, unauthorized } from '@/presentation/helpers/http/http-helper'
-import { HttpRequest } from '@/presentation/protocols'
 import { mockLoadUserByToken } from '@/presentation/test'
 import faker from 'faker'
 import { AuthMiddleware } from './auth-middleware'
+import { HttpRequest, LoadUserByToken } from './auth-middleware-protocols'
 
 const mockRequest = (): HttpRequest => ({
   headers: {

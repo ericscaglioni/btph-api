@@ -1,8 +1,7 @@
-import { Decrypter } from '@/data/protocols/criptography'
-import { LoadUserByIdRepository } from '@/data/protocols/db/user'
 import { mockDecrypter, mockLoadUserByIdRepository } from '@/data/test'
 import faker from 'faker'
 import { DbLoadUserByToken } from './db-load-user-by-token'
+import { Decrypter, LoadUserByIdRepository } from './db-load-user-by-token-protocols'
 
 type SutTypes = {
   sut: DbLoadUserByToken
