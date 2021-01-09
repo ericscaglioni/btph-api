@@ -42,7 +42,7 @@ describe('Message Mongo Repository', () => {
   })
 
   describe('load()', () => {
-    it.only('Should return messages based on limit', async () => {
+    it('Should return messages based on limit', async () => {
       const addMessageModels = [mockAddMessageParams(), mockAddMessageParams(), mockAddMessageParams()]
       await messageCollection.insertMany(addMessageModels)
       const sut = makeSut()

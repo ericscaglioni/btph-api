@@ -21,5 +21,13 @@ export const MongoHelper = {
       await this.connect(this.uri)
     }
     return this.client.db().collection(name)
+  },
+
+  map (data: any): any {
+    const { _id, ...collectionWithoutId } = data
+    return {
+      id: _id,
+      ...collectionWithoutId
+    }
   }
 }
