@@ -52,4 +52,11 @@ describe('DbLoadUserByToken usescase', () => {
     await sut.loadByToken(faker.random.uuid())
     expect(loadByIdSpy).toHaveBeenCalledWith('any_user_id')
   })
+
+  it('Should return null if LoadUserByIdRepository returns null', async () => {
+    const { sut, loadUserByIdRepositoryStub } = makeSut()
+    jest.spyOn(loadUserByIdRepositoryStub, 'loadById').mockResolvedValueOnce(null)
+    const user = await sut.loadByToken(faker.random.uuid())
+    expect(user).toBeNull()
+  })
 })
