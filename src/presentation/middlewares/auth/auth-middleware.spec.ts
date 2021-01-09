@@ -1,9 +1,10 @@
 import { LoadUserByToken } from '@/domain/usecases/user/load-user-by-token'
-import { unauthorized } from '@/presentation/helpers/http/http-helper'
+import { AccessDeniedError } from '@/presentation/errors'
+import { forbidden, unauthorized } from '@/presentation/helpers/http/http-helper'
 import { HttpRequest } from '@/presentation/protocols'
 import { mockLoadUserByToken } from '@/presentation/test'
-import { AuthMiddleware } from './auth-middleware'
 import faker from 'faker'
+import { AuthMiddleware } from './auth-middleware'
 
 const mockRequest = (): HttpRequest => ({
   headers: {
@@ -38,5 +39,12 @@ describe('Auth Middleware', () => {
     const httpRequest = mockRequest()
     await sut.handle(httpRequest)
     expect(loadByTokenSpy).toHaveBeenCalledWith(httpRequest.headers['x-access-token'])
+  })
+
+  it('Should return 403 if LoadUserByToken returns null', async () => {
+    const { sut, loadUserByTokenStub } = makeSut()
+    jest.spyOn(loadUserByTokenStub, 'loadByToken').mockResolvedValueOnce(null)
+    const httpResponse = await sut.handle(mockRequest())
+    expect(httpResponse).toEqual(forbidden(new AccessDeniedError()))
   })
 })
