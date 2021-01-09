@@ -1,7 +1,4 @@
-import { Decrypter } from '@/data/protocols/criptography'
-import { LoadUserByIdRepository } from '@/data/protocols/db/user'
-import { UserModel } from '@/domain/models/user'
-import { LoadUserByToken } from '@/domain/usecases/user/load-user-by-token'
+import { Decrypter, LoadUserByIdRepository, LoadUserByToken, UserModel } from './db-load-user-by-token-protocols'
 
 export class DbLoadUserByToken implements LoadUserByToken {
   constructor (
