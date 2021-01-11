@@ -3,7 +3,7 @@ import { AddMessageController } from '@/presentation/controllers/message/add-mes
 import { Controller } from '@/presentation/protocols'
 import { makeAddMessageValidation } from './add-message-validation-factory'
 
-export const makeAddMessaqeController = (): Controller => {
+export const makeAddMessageController = (): Controller => {
   const addMessageController = new AddMessageController(
     makeDbAddMessage(),
     makeAddMessageValidation()

@@ -45,4 +45,12 @@ describe('Message routes', () => {
       expect(message).toBeTruthy()
     })
   })
+
+  describe('GET /messages', () => {
+    it('Should return 401 on load messages without access token', async () => {
+      await request(app)
+        .get('/api/messages')
+        .expect(401)
+    })
+  })
 })
