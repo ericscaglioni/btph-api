@@ -10,10 +10,10 @@ export class LoadMessagesController implements Controller {
       const {
         initialDate,
         finalDate,
-        read,
-        limit,
-        offset
-      } = httpRequest.query
+        read = false,
+        limit = 10,
+        offset = 0
+      } = httpRequest.query || {}
       const pagination = { limit, offset }
       const messages = await this.loadMessages.load({
         initialDate,

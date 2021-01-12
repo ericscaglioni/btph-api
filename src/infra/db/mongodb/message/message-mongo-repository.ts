@@ -2,7 +2,7 @@ import { AddMessageRepository, LoadMessagesRepository } from '@/data/protocols/d
 import { MessageModel } from '@/domain/models/message'
 import { AddMessageParams } from '@/domain/usecases/message/add-message'
 import { LoadMessagesParams } from '@/domain/usecases/message/load-messages'
-import { MongoHelper } from './../helpers/mongo-helper'
+import { MongoHelper } from '@/infra/db/mongodb/helpers/mongo-helper'
 
 export class MessageMongoRepository implements AddMessageRepository, LoadMessagesRepository {
   async add (message: AddMessageParams): Promise<void> {
@@ -10,15 +10,15 @@ export class MessageMongoRepository implements AddMessageRepository, LoadMessage
     await messageCollection.insertOne(message)
   }
 
-  async load (message: LoadMessagesParams): Promise<MessageModel[]> {
-    const { limit, offset } = message.pagination
+  async load (params: LoadMessagesParams): Promise<MessageModel[]> {
+    const { limit, offset } = params.pagination
     const messageCollection = await MongoHelper.getCollection('messages')
     const messages = await messageCollection.find<MessageModel>({
       date: {
-        $gte: message.initialDate,
-        $lte: message.finalDate
+        $gte: new Date(params.initialDate).toISOString(),
+        $lte: new Date(params.finalDate).toISOString()
       },
-      read: message.read
+      read: params.read
     }).limit(limit)
       .skip(offset)
       .toArray()

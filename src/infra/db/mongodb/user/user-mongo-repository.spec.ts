@@ -22,12 +22,6 @@ describe('User Mongo Repository', () => {
   })
 
   describe('loadById()', () => {
-    it('Should return null if user doesn\'t exist', async () => {
-      const sut = makeSut()
-      const user = await sut.loadById(faker.random.uuid())
-      expect(user).toBeNull()
-    })
-
     it('Should return an user on success', async () => {
       const userParams = {
         name: faker.name.firstName(),

@@ -3,6 +3,7 @@ import MockDate from 'mockdate'
 import { Collection } from 'mongodb'
 import { MongoHelper } from './../helpers/mongo-helper'
 import { MessageMongoRepository } from './message-mongo-repository'
+import faker from 'faker'
 
 let messageCollection: Collection
 
@@ -43,8 +44,22 @@ describe('Message Mongo Repository', () => {
 
   describe('load()', () => {
     it('Should return messages based on limit', async () => {
-      const addMessageModels = [mockAddMessageParams(), mockAddMessageParams(), mockAddMessageParams()]
-      await messageCollection.insertMany(addMessageModels)
+      await messageCollection.insertMany([{
+        name: faker.name.findName(),
+        message: faker.lorem.paragraphs(3),
+        read: false,
+        date: new Date().toISOString()
+      }, {
+        name: faker.name.findName(),
+        message: faker.lorem.paragraphs(3),
+        read: false,
+        date: new Date().toISOString()
+      }, {
+        name: faker.name.findName(),
+        message: faker.lorem.paragraphs(3),
+        read: false,
+        date: new Date().toISOString()
+      }])
       const sut = makeSut()
       const loadMessageParams = {
         initialDate: new Date(),
@@ -61,8 +76,22 @@ describe('Message Mongo Repository', () => {
     })
 
     it('Should return messages based on limit and offset', async () => {
-      const addMessageModels = [mockAddMessageParams(), mockAddMessageParams(), mockAddMessageParams()]
-      await messageCollection.insertMany(addMessageModels)
+      await messageCollection.insertMany([{
+        name: faker.name.findName(),
+        message: faker.lorem.paragraphs(3),
+        read: false,
+        date: new Date().toISOString()
+      }, {
+        name: faker.name.findName(),
+        message: faker.lorem.paragraphs(3),
+        read: false,
+        date: new Date().toISOString()
+      }, {
+        name: faker.name.findName(),
+        message: faker.lorem.paragraphs(3),
+        read: false,
+        date: new Date().toISOString()
+      }])
       const sut = makeSut()
       const loadMessageParams = {
         initialDate: new Date(),
@@ -79,10 +108,23 @@ describe('Message Mongo Repository', () => {
     })
 
     it('Should return read messages', async () => {
-      const readMessage = mockAddMessageParams()
-      readMessage.read = true
-      const addMessageModels = [mockAddMessageParams(), readMessage, mockAddMessageParams()]
-      await messageCollection.insertMany(addMessageModels)
+      const readMessage = {
+        name: faker.name.findName(),
+        message: faker.lorem.paragraphs(3),
+        read: true,
+        date: new Date().toISOString()
+      }
+      await messageCollection.insertMany([{
+        name: faker.name.findName(),
+        message: faker.lorem.paragraphs(3),
+        read: false,
+        date: new Date().toISOString()
+      }, {
+        name: faker.name.findName(),
+        message: faker.lorem.paragraphs(3),
+        read: false,
+        date: new Date().toISOString()
+      }, readMessage])
       const sut = makeSut()
       const loadMessageParams = {
         initialDate: new Date(),
