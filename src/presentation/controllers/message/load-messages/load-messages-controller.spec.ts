@@ -7,15 +7,19 @@ import MockDate from 'mockdate'
 import { LoadMessagesController } from './load-messages-controller'
 import { LoadMessages } from './load-messages-controller-protocols'
 
-const mockRequest = (): HttpRequest => ({
-  query: {
-    initialDate: faker.date.recent(),
-    finalDate: faker.date.future(),
-    read: false,
-    limit: faker.random.number(10),
-    offset: faker.random.number(10)
+const mockRequest = (): HttpRequest => {
+  const finalDate = faker.date.future()
+  finalDate.setHours(23, 59, 59)
+  return {
+    query: {
+      initialDate: faker.date.recent().toISOString(),
+      finalDate: finalDate.toISOString(),
+      read: false,
+      limit: faker.random.number(10),
+      offset: faker.random.number(10)
+    }
   }
-})
+}
 
 type SutTypes = {
   sut: LoadMessagesController

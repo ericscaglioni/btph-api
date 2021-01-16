@@ -6,8 +6,8 @@ type Pagination = {
 }
 
 export type LoadMessagesParams = {
-  initialDate: Date
-  finalDate: Date
+  initialDate: string
+  finalDate: string
   read: boolean
   pagination: Pagination
 }

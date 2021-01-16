@@ -8,17 +8,17 @@ services:
       - ./data:/data/db
     ports:
       - "27017:27017"
-  btph-messages-api:
-    container_name: btph-messages-api-container
+  btph-api:
+    container_name: btph-api-container
     image: node:12
-    working_dir: /usr/src/btph-messages-api
+    working_dir: /usr/src/btph-api
     restart: always
     command: bash -c "npm install --only=prod && npm run debug"
     environment:
-      - MONGO_URL=mongodb://mongo:27017/btph-messages-api
+      - MONGO_URL=mongodb://mongo:27017/btph-api
     volumes:
-      - ./dist/:/usr/src/btph-messages-api/dist/
-      - ./package.json:/usr/src/btph-messages-api/package.json
+      - ./dist/:/usr/src/btph-api/dist/
+      - ./package.json:/usr/src/btph-api/package.json
     ports:
       - "5050:5050"
       - "9222:9222"

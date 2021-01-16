@@ -24,8 +24,8 @@ export const mockMessageModels = (): MessageModel[] => ([{
 }])
 
 export const mockLoadMessagesParams = (): LoadMessagesParams => ({
-  initialDate: faker.date.recent(),
-  finalDate: faker.date.future(),
+  initialDate: new Date().toISOString(),
+  finalDate: new Date().toISOString(),
   read: false,
   pagination: {
     limit: 10,

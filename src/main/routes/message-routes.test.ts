@@ -25,17 +25,17 @@ const insertMessages = async (): Promise<void> => {
     name: faker.name.findName(),
     message: faker.lorem.paragraphs(3),
     read: false,
-    date: new Date().toISOString()
+    date: new Date()
   }, {
     name: faker.name.findName(),
     message: faker.lorem.paragraphs(3),
     read: false,
-    date: new Date(finalDate).toISOString()
+    date: new Date(finalDate)
   }, {
     name: faker.name.findName(),
     message: faker.lorem.paragraphs(3),
     read: false,
-    date: new Date().toISOString()
+    date: new Date()
   }])
 }
 

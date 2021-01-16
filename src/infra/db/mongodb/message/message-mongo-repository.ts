@@ -15,13 +15,13 @@ export class MessageMongoRepository implements AddMessageRepository, LoadMessage
     const messageCollection = await MongoHelper.getCollection('messages')
     const messages = await messageCollection.find<MessageModel>({
       date: {
-        $gte: new Date(params.initialDate).toISOString(),
-        $lte: new Date(params.finalDate).toISOString()
+        $gte: new Date(params.initialDate),
+        $lte: new Date(params.finalDate)
       },
       read: params.read
     }).limit(limit)
       .skip(offset)
       .toArray()
-    return messages
+    return MongoHelper.mapCollection(messages)
   }
 }

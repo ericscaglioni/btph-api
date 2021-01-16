@@ -5,6 +5,21 @@ import { MongoHelper } from './../helpers/mongo-helper'
 import { MessageMongoRepository } from './message-mongo-repository'
 import faker from 'faker'
 
+type DateRange = {
+  initialDate: string
+  finalDate: string
+}
+
+const makeDateRange = (): DateRange => {
+  const initialDate = new Date()
+  const finalDate = new Date()
+  finalDate.setHours(23, 59, 59)
+  return {
+    initialDate: initialDate.toISOString(),
+    finalDate: finalDate.toISOString()
+  }
+}
+
 let messageCollection: Collection
 
 const makeSut = (): MessageMongoRepository => new MessageMongoRepository()
@@ -48,22 +63,23 @@ describe('Message Mongo Repository', () => {
         name: faker.name.findName(),
         message: faker.lorem.paragraphs(3),
         read: false,
-        date: new Date().toISOString()
+        date: new Date()
       }, {
         name: faker.name.findName(),
         message: faker.lorem.paragraphs(3),
         read: false,
-        date: new Date().toISOString()
+        date: new Date()
       }, {
         name: faker.name.findName(),
         message: faker.lorem.paragraphs(3),
         read: false,
-        date: new Date().toISOString()
+        date: new Date()
       }])
       const sut = makeSut()
+      const { initialDate, finalDate } = makeDateRange()
       const loadMessageParams = {
-        initialDate: new Date(),
-        finalDate: new Date(),
+        initialDate,
+        finalDate,
         read: false,
         pagination: {
           limit: 2,
@@ -80,22 +96,23 @@ describe('Message Mongo Repository', () => {
         name: faker.name.findName(),
         message: faker.lorem.paragraphs(3),
         read: false,
-        date: new Date().toISOString()
+        date: new Date()
       }, {
         name: faker.name.findName(),
         message: faker.lorem.paragraphs(3),
         read: false,
-        date: new Date().toISOString()
+        date: new Date()
       }, {
         name: faker.name.findName(),
         message: faker.lorem.paragraphs(3),
         read: false,
-        date: new Date().toISOString()
+        date: new Date()
       }])
       const sut = makeSut()
+      const { initialDate, finalDate } = makeDateRange()
       const loadMessageParams = {
-        initialDate: new Date(),
-        finalDate: new Date(),
+        initialDate,
+        finalDate,
         read: false,
         pagination: {
           limit: 2,
@@ -112,23 +129,24 @@ describe('Message Mongo Repository', () => {
         name: faker.name.findName(),
         message: faker.lorem.paragraphs(3),
         read: true,
-        date: new Date().toISOString()
+        date: new Date()
       }
       await messageCollection.insertMany([{
         name: faker.name.findName(),
         message: faker.lorem.paragraphs(3),
         read: false,
-        date: new Date().toISOString()
+        date: new Date()
       }, {
         name: faker.name.findName(),
         message: faker.lorem.paragraphs(3),
         read: false,
-        date: new Date().toISOString()
+        date: new Date()
       }, readMessage])
       const sut = makeSut()
+      const { initialDate, finalDate } = makeDateRange()
       const loadMessageParams = {
-        initialDate: new Date(),
-        finalDate: new Date(),
+        initialDate,
+        finalDate,
         read: true,
         pagination: {
           limit: 10,
@@ -148,8 +166,8 @@ describe('Message Mongo Repository', () => {
       await messageCollection.insertMany(addMessageModels)
       const sut = makeSut()
       const loadMessageParams = {
-        initialDate: new Date('2021-01-01'),
-        finalDate: new Date('2021-01-08'),
+        initialDate: new Date('2021-01-01').toISOString(),
+        finalDate: new Date('2021-01-08').toISOString(),
         read: false,
         pagination: {
           limit: 10,
