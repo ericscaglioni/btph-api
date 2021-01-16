@@ -42,4 +42,13 @@ describe('Add User usecase', () => {
     await sut.add(params)
     expect(loadByEmailSpy).toHaveBeenCalledWith(params.email)
   })
+
+  it('Should throw if LoadUserByEmailRepository throws', async () => {
+    const { sut, loadUserByEmailRepositoryStub } = makeSut()
+    jest.spyOn(loadUserByEmailRepositoryStub, 'loadByEmail').mockImplementationOnce(() => {
+      throw new Error()
+    })
+    const promise = sut.add(mockAddUserParams())
+    await expect(promise).rejects.toThrow()
+  })
 })
