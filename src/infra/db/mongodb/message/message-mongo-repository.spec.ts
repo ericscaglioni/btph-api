@@ -125,7 +125,7 @@ describe('Message Mongo Repository', () => {
     })
 
     it('Should return read messages', async () => {
-      const readMessage = {
+      const readMessage: any = {
         name: faker.name.findName(),
         message: faker.lorem.paragraphs(3),
         read: true,
@@ -153,10 +153,14 @@ describe('Message Mongo Repository', () => {
           offset: 0
         }
       }
+      const { _id: id, ...message } = readMessage
       const messages = await sut.load(loadMessageParams)
       expect(messages).toBeTruthy()
       expect(messages).toHaveLength(1)
-      expect(messages[0]).toEqual(readMessage)
+      expect(messages[0]).toEqual({
+        id,
+        ...message
+      })
     })
 
     it('Should return an empty array if there is no message based on filters', async () => {
