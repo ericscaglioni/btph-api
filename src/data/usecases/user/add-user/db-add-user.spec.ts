@@ -51,4 +51,11 @@ describe('Add User usecase', () => {
     const promise = sut.add(mockAddUserParams())
     await expect(promise).rejects.toThrow()
   })
+
+  it('Should return null if LoadUserByEmailRepository returns null', async () => {
+    const { sut, loadUserByEmailRepositoryStub } = makeSut()
+    jest.spyOn(loadUserByEmailRepositoryStub, 'loadByEmail').mockResolvedValueOnce(null)
+    const user = await sut.add(mockAddUserParams())
+    expect(user).toBeNull()
+  })
 })
