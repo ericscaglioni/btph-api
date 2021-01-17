@@ -1,3 +1,4 @@
+import { Hasher } from '@/data/protocols/criptography/hasher'
 import { LoadUserByEmailRepository } from '@/data/protocols/db/user'
 import { mockUser } from '@/domain/test'
 import { AddUserParams } from '@/domain/usecases/user/add-user'
@@ -11,10 +12,19 @@ const mockAddUserParams = (): AddUserParams => ({
   password: faker.internet.password()
 })
 
+export const mockHasher = (): Hasher => {
+  class HasherStub implements Hasher {
+    async hash (value: string): Promise<string> {
+      return 'hashed_password'
+    }
+  }
+  return new HasherStub()
+}
+
 const mockLoadUserByEmailRepository = (): LoadUserByEmailRepository => {
   class LoadUserByEmailRepositortyStub implements LoadUserByEmailRepository {
     async loadByEmail (email: string): Promise<UserModel> {
-      return mockUser()
+      return null
     }
   }
   return new LoadUserByEmailRepositortyStub()
@@ -23,14 +33,17 @@ const mockLoadUserByEmailRepository = (): LoadUserByEmailRepository => {
 type SutTypes = {
   sut: DbAddUser
   loadUserByEmailRepositoryStub: LoadUserByEmailRepository
+  hasherStub: Hasher
 }
 
 const makeSut = (): SutTypes => {
   const loadUserByEmailRepositoryStub = mockLoadUserByEmailRepository()
-  const sut = new DbAddUser(loadUserByEmailRepositoryStub)
+  const hasherStub = mockHasher()
+  const sut = new DbAddUser(loadUserByEmailRepositoryStub, hasherStub)
   return {
     sut,
-    loadUserByEmailRepositoryStub
+    loadUserByEmailRepositoryStub,
+    hasherStub
   }
 }
 
@@ -52,10 +65,18 @@ describe('Add User usecase', () => {
     await expect(promise).rejects.toThrow()
   })
 
-  it('Should return null if LoadUserByEmailRepository returns null', async () => {
+  it('Should return null if LoadUserByEmailRepository returns a user', async () => {
     const { sut, loadUserByEmailRepositoryStub } = makeSut()
-    jest.spyOn(loadUserByEmailRepositoryStub, 'loadByEmail').mockResolvedValueOnce(null)
+    jest.spyOn(loadUserByEmailRepositoryStub, 'loadByEmail').mockResolvedValueOnce(mockUser())
     const user = await sut.add(mockAddUserParams())
     expect(user).toBeNull()
+  })
+
+  it('Should call Hasher with correct password', async () => {
+    const { sut, hasherStub } = makeSut()
+    const encryptSpy = jest.spyOn(hasherStub, 'hash')
+    const params = mockAddUserParams()
+    await sut.add(params)
+    expect(encryptSpy).toHaveBeenCalledWith(params.password)
   })
 })
