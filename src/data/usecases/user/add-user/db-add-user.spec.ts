@@ -1,11 +1,9 @@
-import { Hasher } from '@/data/protocols/criptography/hasher'
-import { AddUserRepository, LoadUserByEmailRepository } from '@/data/protocols/db/user'
 import { mockAddUserRepository, mockHasher } from '@/data/test'
 import { mockUser } from '@/domain/test'
-import { AddUserParams } from '@/domain/usecases/user/add-user'
 import faker from 'faker'
 import { UserModel } from '../load-user-by-token/db-load-user-by-token-protocols'
 import { DbAddUser } from './db-add-user'
+import { AddUserParams, AddUserRepository, Hasher, LoadUserByEmailRepository } from './db-add-user-protocols'
 
 const mockAddUserParams = (): AddUserParams => ({
   name: faker.name.findName(),

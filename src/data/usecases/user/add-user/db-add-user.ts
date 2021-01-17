@@ -1,7 +1,4 @@
-import { Hasher } from '@/data/protocols/criptography'
-import { AddUserRepository, LoadUserByEmailRepository } from '@/data/protocols/db/user'
-import { UserModel } from '@/domain/models/user'
-import { AddUser, AddUserParams } from '@/domain/usecases/user/add-user'
+import { AddUser, AddUserParams, AddUserRepository, Hasher, LoadUserByEmailRepository, UserModel } from './db-add-user-protocols'
 
 export class DbAddUser implements AddUser {
   constructor (
