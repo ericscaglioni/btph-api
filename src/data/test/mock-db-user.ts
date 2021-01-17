@@ -1,6 +1,7 @@
-import { LoadUserByIdRepository } from '@/data/protocols/db/user'
+import { AddUserRepository, LoadUserByIdRepository } from '@/data/protocols/db/user'
 import { UserModel } from '@/domain/models/user'
 import { mockUser } from '@/domain/test'
+import { AddUserParams } from '@/domain/usecases/user/add-user'
 
 export const mockLoadUserByIdRepository = (): LoadUserByIdRepository => {
   class LoadUserByIdRepositortyStub implements LoadUserByIdRepository {
@@ -9,4 +10,13 @@ export const mockLoadUserByIdRepository = (): LoadUserByIdRepository => {
     }
   }
   return new LoadUserByIdRepositortyStub()
+}
+
+export const mockAddUserRepository = (): AddUserRepository => {
+  class AddUserRepositortyStub implements AddUserRepository {
+    async add (userData: AddUserParams): Promise<UserModel> {
+      return mockUser()
+    }
+  }
+  return new AddUserRepositortyStub()
 }

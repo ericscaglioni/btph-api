@@ -1,5 +1,6 @@
 import { Hasher } from '@/data/protocols/criptography/hasher'
-import { LoadUserByEmailRepository } from '@/data/protocols/db/user'
+import { AddUserRepository, LoadUserByEmailRepository } from '@/data/protocols/db/user'
+import { mockAddUserRepository, mockHasher } from '@/data/test'
 import { mockUser } from '@/domain/test'
 import { AddUserParams } from '@/domain/usecases/user/add-user'
 import faker from 'faker'
@@ -11,15 +12,6 @@ const mockAddUserParams = (): AddUserParams => ({
   email: faker.internet.email(),
   password: faker.internet.password()
 })
-
-export const mockHasher = (): Hasher => {
-  class HasherStub implements Hasher {
-    async hash (value: string): Promise<string> {
-      return 'hashed_password'
-    }
-  }
-  return new HasherStub()
-}
 
 const mockLoadUserByEmailRepository = (): LoadUserByEmailRepository => {
   class LoadUserByEmailRepositortyStub implements LoadUserByEmailRepository {
@@ -34,16 +26,23 @@ type SutTypes = {
   sut: DbAddUser
   loadUserByEmailRepositoryStub: LoadUserByEmailRepository
   hasherStub: Hasher
+  addUserRepositoryStub: AddUserRepository
 }
 
 const makeSut = (): SutTypes => {
   const loadUserByEmailRepositoryStub = mockLoadUserByEmailRepository()
   const hasherStub = mockHasher()
-  const sut = new DbAddUser(loadUserByEmailRepositoryStub, hasherStub)
+  const addUserRepositoryStub = mockAddUserRepository()
+  const sut = new DbAddUser(
+    loadUserByEmailRepositoryStub,
+    hasherStub,
+    addUserRepositoryStub
+  )
   return {
     sut,
     loadUserByEmailRepositoryStub,
-    hasherStub
+    hasherStub,
+    addUserRepositoryStub
   }
 }
 
@@ -87,5 +86,16 @@ describe('Add User usecase', () => {
     })
     const promise = sut.add(mockAddUserParams())
     await expect(promise).rejects.toThrow()
+  })
+
+  it('Should call AddUserRepository with correct data', async () => {
+    const { sut, addUserRepositoryStub } = makeSut()
+    const addSpy = jest.spyOn(addUserRepositoryStub, 'add')
+    const params = mockAddUserParams()
+    await sut.add(params)
+    expect(addSpy).toHaveBeenCalledWith({
+      ...params,
+      password: 'hashed_password'
+    })
   })
 })
