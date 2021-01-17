@@ -40,4 +40,18 @@ describe('User Mongo Repository', () => {
       })
     })
   })
+
+  describe('add()', () => {
+    it('Should add a user on user', async () => {
+      const sut = makeSut()
+      const userData = {
+        name: faker.name.firstName(),
+        email: faker.internet.email(),
+        password: faker.internet.password()
+      }
+      await sut.add(userData)
+      const user = await userCollection.findOne({ email: userData.email })
+      expect(user).toBeTruthy()
+    })
+  })
 })
