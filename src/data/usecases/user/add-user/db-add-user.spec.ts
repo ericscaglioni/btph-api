@@ -98,4 +98,13 @@ describe('Add User usecase', () => {
       password: 'hashed_password'
     })
   })
+
+  it('Should throw if AddUserRepository throws', async () => {
+    const { sut, addUserRepositoryStub } = makeSut()
+    jest.spyOn(addUserRepositoryStub, 'add').mockImplementationOnce(() => {
+      throw new Error()
+    })
+    const promise = sut.add(mockAddUserParams())
+    await expect(promise).rejects.toThrow()
+  })
 })
