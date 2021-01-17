@@ -79,4 +79,13 @@ describe('Add User usecase', () => {
     await sut.add(params)
     expect(encryptSpy).toHaveBeenCalledWith(params.password)
   })
+
+  it('Should throw if Hasher throws', async () => {
+    const { sut, hasherStub } = makeSut()
+    jest.spyOn(hasherStub, 'hash').mockImplementationOnce(() => {
+      throw new Error()
+    })
+    const promise = sut.add(mockAddUserParams())
+    await expect(promise).rejects.toThrow()
+  })
 })
