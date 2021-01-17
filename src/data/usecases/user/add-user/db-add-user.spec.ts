@@ -107,4 +107,10 @@ describe('Add User usecase', () => {
     const promise = sut.add(mockAddUserParams())
     await expect(promise).rejects.toThrow()
   })
+
+  it('Should return an user on success', async () => {
+    const { sut } = makeSut()
+    const user = await sut.add(mockAddUserParams())
+    expect(user).toEqual(mockUser())
+  })
 })
