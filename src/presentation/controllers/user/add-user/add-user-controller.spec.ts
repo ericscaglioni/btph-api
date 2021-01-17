@@ -1,30 +1,36 @@
-import { MissingParamError } from '@/presentation/errors/missing-param-error'
-import { badRequest } from '@/presentation/helpers/http/http-helper'
+import { HttpRequest, Validation } from '@/presentation/protocols'
+import { mockValidation } from '@/presentation/test'
 import faker from 'faker'
 import { AddUserController } from './add-user-controller'
 
+const mockRequest = (): HttpRequest => ({
+  body: {
+    email: faker.internet.email(),
+    password: faker.internet.password(),
+    passwordConfirmation: faker.internet.password()
+  }
+})
+
 type SutTypes = {
   sut: AddUserController
+  validationStub: Validation
 }
 
 const makeSut = (): SutTypes => {
-  const sut = new AddUserController()
+  const validationStub = mockValidation()
+  const sut = new AddUserController(validationStub)
   return {
-    sut
+    sut,
+    validationStub
   }
 }
 
 describe('Add user Controller', () => {
-  it('Should return 400 if name is not provided', async () => {
-    const { sut } = makeSut()
-    const httpRequest = {
-      body: {
-        email: faker.internet.email(),
-        password: faker.internet.password(),
-        passwordConfirmation: faker.internet.password()
-      }
-    }
-    const httpResponse = await sut.handle(httpRequest)
-    expect(httpResponse).toEqual(badRequest(new MissingParamError('name')))
+  it('Should call Validation with correct data', async () => {
+    const { sut, validationStub } = makeSut()
+    const validateSpy = jest.spyOn(validationStub, 'validate')
+    const httpRequest = mockRequest()
+    await sut.handle(httpRequest)
+    expect(validateSpy).toHaveBeenCalledWith(httpRequest.body)
   })
 })

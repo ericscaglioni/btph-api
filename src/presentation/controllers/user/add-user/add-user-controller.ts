@@ -1,11 +1,13 @@
-import { MissingParamError } from '@/presentation/errors'
 import { badRequest } from '@/presentation/helpers/http/http-helper'
-import { Controller, HttpRequest, HttpResponse } from '@/presentation/protocols'
+import { Controller, HttpRequest, HttpResponse, Validation } from '@/presentation/protocols'
 
 export class AddUserController implements Controller {
+  constructor (private readonly validation: Validation) {}
+
   async handle (httpRequest: HttpRequest): Promise<HttpResponse> {
-    if (!httpRequest.body.name) {
-      return badRequest(new MissingParamError('name'))
+    const error = this.validation.validate(httpRequest.body)
+    if (error) {
+      return badRequest(error)
     }
     return null
   }
