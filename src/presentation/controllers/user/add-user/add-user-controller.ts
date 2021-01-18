@@ -1,5 +1,6 @@
 import { AddUser } from '@/domain/usecases/user/add-user'
-import { badRequest, serverError } from '@/presentation/helpers/http/http-helper'
+import { EmailInUseError } from '@/presentation/errors'
+import { badRequest, forbidden, serverError } from '@/presentation/helpers/http/http-helper'
 import { Controller, HttpRequest, HttpResponse, Validation } from '@/presentation/protocols'
 
 export class AddUserController implements Controller {
@@ -15,11 +16,14 @@ export class AddUserController implements Controller {
         return badRequest(error)
       }
       const { name, email, password } = httpRequest.body
-      await this.addUser.add({
+      const user = await this.addUser.add({
         name,
         email,
         password
       })
+      if (!user) {
+        return forbidden(new EmailInUseError())
+      }
       return null
     } catch (error) {
       return serverError(error)

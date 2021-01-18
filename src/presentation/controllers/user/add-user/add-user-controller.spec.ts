@@ -1,6 +1,6 @@
 import { AddUser } from '@/domain/usecases/user/add-user'
-import { MissingParamError } from '@/presentation/errors'
-import { badRequest, serverError } from '@/presentation/helpers/http/http-helper'
+import { EmailInUseError, MissingParamError } from '@/presentation/errors'
+import { badRequest, forbidden, serverError } from '@/presentation/helpers/http/http-helper'
 import { HttpRequest, Validation } from '@/presentation/protocols'
 import { mockAddUser, mockValidation } from '@/presentation/test'
 import faker from 'faker'
@@ -67,5 +67,12 @@ describe('Add user Controller', () => {
     })
     const httpResponse = await sut.handle(mockRequest())
     expect(httpResponse).toEqual(serverError(new Error()))
+  })
+
+  it('Should return 403 if AddUser returns null', async () => {
+    const { sut, addUserStub } = makeSut()
+    jest.spyOn(addUserStub, 'add').mockResolvedValueOnce(null)
+    const httpResponse = await sut.handle(mockRequest())
+    expect(httpResponse).toEqual(forbidden(new EmailInUseError()))
   })
 })
