@@ -7,6 +7,9 @@ jest.mock('jsonwebtoken', () => ({
     return {
       id: 'any_user_id'
     }
+  },
+  async sign (): Promise<string> {
+    return 'any_token'
   }
 }))
 
@@ -17,7 +20,7 @@ const randomSecret = faker.random.word()
 const makeSut = (): JwtAdapter => new JwtAdapter(randomSecret)
 
 describe('JWT Adapter', () => {
-  describe('verify', () => {
+  describe('verify()', () => {
     it('Should call jwt verify with correct data', async () => {
       const sut = makeSut()
       const verifySpy = jest.spyOn(jwt, 'verify')
@@ -38,6 +41,15 @@ describe('JWT Adapter', () => {
       const sut = makeSut()
       const userId = await sut.decrypt(token)
       expect(userId).toBe('any_user_id')
+    })
+  })
+
+  describe('sign()', () => {
+    it('Should call sign with correct data', async () => {
+      const sut = makeSut()
+      const signSpy = jest.spyOn(jwt, 'sign')
+      await sut.encrypt('any_id')
+      expect(signSpy).toHaveBeenCalledWith({ id: 'any_id' }, randomSecret)
     })
   })
 })
