@@ -1,7 +1,7 @@
 import { AddUser } from '@/domain/usecases/user/add-user'
 import { Authenticator } from '@/domain/usecases/user/authenticator'
 import { EmailInUseError } from '@/presentation/errors'
-import { badRequest, forbidden, serverError } from '@/presentation/helpers/http/http-helper'
+import { badRequest, forbidden, ok, serverError } from '@/presentation/helpers/http/http-helper'
 import { Controller, HttpRequest, HttpResponse, Validation } from '@/presentation/protocols'
 
 export class AddUserController implements Controller {
@@ -26,11 +26,11 @@ export class AddUserController implements Controller {
       if (!user) {
         return forbidden(new EmailInUseError())
       }
-      await this.authenticator.auth({
+      const authenticatedUser = await this.authenticator.auth({
         email,
         password
       })
-      return null
+      return ok(authenticatedUser)
     } catch (error) {
       return serverError(error)
     }
