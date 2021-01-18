@@ -1,7 +1,7 @@
 import { Encrypter, HashComparer } from '@/data/protocols/criptography'
 import { LoadUserByEmailRepository } from '@/data/protocols/db/user'
 import { mockEncrypter, mockHashComparer, mockLoadUserByEmailRepository } from '@/data/test'
-import { mockAuthentication } from '@/domain/test'
+import { mockAuthentication, mockUser } from '@/domain/test'
 import { DbAuthenticator } from './db-authenticator'
 
 type SutTypes = {
@@ -91,5 +91,15 @@ describe('Authenticator usecase', () => {
     })
     const promise = sut.auth(mockAuthentication())
     await expect(promise).rejects.toThrow()
+  })
+
+  it('Should return an authenticated user on success', async () => {
+    const { sut } = makeSut()
+    const authenticatedUser = await sut.auth(mockAuthentication())
+    const user = mockUser()
+    expect(authenticatedUser).toEqual({
+      accessToken: 'any_token',
+      name: user.name
+    })
   })
 })

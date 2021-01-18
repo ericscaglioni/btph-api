@@ -15,7 +15,11 @@ export class DbAuthenticator implements Authenticator {
     if (user) {
       const isValid = await this.hashComparer.compare(authParams.password, user.password)
       if (isValid) {
-        await this.encrypter.encrypt(user.id)
+        const accessToken = await this.encrypter.encrypt(user.id)
+        return {
+          accessToken,
+          name: user.name
+        }
       }
     }
     return null
