@@ -83,4 +83,13 @@ describe('Authenticator usecase', () => {
     await sut.auth(mockAuthentication())
     expect(encryptSpy).toHaveBeenCalledWith('any_id')
   })
+
+  it('Should throw if Encrypter throws', async () => {
+    const { sut, encrypterStub } = makeSut()
+    jest.spyOn(encrypterStub, 'encrypt').mockImplementationOnce(() => {
+      throw new Error()
+    })
+    const promise = sut.auth(mockAuthentication())
+    await expect(promise).rejects.toThrow()
+  })
 })
