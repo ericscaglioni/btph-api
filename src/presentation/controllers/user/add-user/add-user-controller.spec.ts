@@ -1,8 +1,9 @@
 import { AddUser } from '@/domain/usecases/user/add-user'
+import { Authenticator } from '@/domain/usecases/user/authenticator'
 import { EmailInUseError, MissingParamError } from '@/presentation/errors'
 import { badRequest, forbidden, serverError } from '@/presentation/helpers/http/http-helper'
 import { HttpRequest, Validation } from '@/presentation/protocols'
-import { mockAddUser, mockValidation } from '@/presentation/test'
+import { mockAddUser, mockAuthenticator, mockValidation } from '@/presentation/test'
 import faker from 'faker'
 import { AddUserController } from './add-user-controller'
 
@@ -19,16 +20,19 @@ type SutTypes = {
   sut: AddUserController
   validationStub: Validation
   addUserStub: AddUser
+  authenticatorStub: Authenticator
 }
 
 const makeSut = (): SutTypes => {
   const validationStub = mockValidation()
   const addUserStub = mockAddUser()
-  const sut = new AddUserController(validationStub, addUserStub)
+  const authenticatorStub = mockAuthenticator()
+  const sut = new AddUserController(validationStub, addUserStub, authenticatorStub)
   return {
     sut,
     validationStub,
-    addUserStub
+    addUserStub,
+    authenticatorStub
   }
 }
 
@@ -74,5 +78,16 @@ describe('Add user Controller', () => {
     jest.spyOn(addUserStub, 'add').mockResolvedValueOnce(null)
     const httpResponse = await sut.handle(mockRequest())
     expect(httpResponse).toEqual(forbidden(new EmailInUseError()))
+  })
+
+  it('Should call Authenticator with correct data', async () => {
+    const { sut, authenticatorStub } = makeSut()
+    const authSpy = jest.spyOn(authenticatorStub, 'auth')
+    const request = mockRequest()
+    await sut.handle(request)
+    expect(authSpy).toHaveBeenCalledWith({
+      email: request.body.email,
+      password: request.body.password
+    })
   })
 })
