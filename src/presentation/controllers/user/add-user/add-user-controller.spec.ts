@@ -90,4 +90,13 @@ describe('Add user Controller', () => {
       password: request.body.password
     })
   })
+
+  it('Should return 500 if Authenticator throws', async () => {
+    const { sut, authenticatorStub } = makeSut()
+    jest.spyOn(authenticatorStub, 'auth').mockImplementationOnce(() => {
+      throw new Error()
+    })
+    const httpResponse = await sut.handle(mockRequest())
+    expect(httpResponse).toEqual(serverError(new Error()))
+  })
 })
