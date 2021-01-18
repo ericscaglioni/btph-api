@@ -11,7 +11,7 @@ export const mockUser = (): UserModel => ({
   id: fakeId,
   name: fakeName,
   email: fakeEmail,
-  password: fakePassword
+  password: 'hashed_password'
 })
 
 export const mockAuthentication = (): AuthenticationParams => ({
