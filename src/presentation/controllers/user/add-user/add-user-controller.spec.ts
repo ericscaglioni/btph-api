@@ -1,11 +1,9 @@
-import { AddUser } from '@/domain/usecases/user/add-user'
-import { Authenticator } from '@/domain/usecases/user/authenticator'
 import { EmailInUseError, MissingParamError } from '@/presentation/errors'
 import { badRequest, forbidden, ok, serverError } from '@/presentation/helpers/http/http-helper'
-import { HttpRequest, Validation } from '@/presentation/protocols'
 import { mockAddUser, mockAuthenticator, mockValidation } from '@/presentation/test'
 import faker from 'faker'
 import { AddUserController } from './add-user-controller'
+import { AddUser, Authenticator, HttpRequest, Validation } from './add-user-controller-protocols'
 
 const mockRequest = (): HttpRequest => ({
   body: {

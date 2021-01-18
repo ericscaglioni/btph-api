@@ -1,8 +1,6 @@
-import { AddUser } from '@/domain/usecases/user/add-user'
-import { Authenticator } from '@/domain/usecases/user/authenticator'
 import { EmailInUseError } from '@/presentation/errors'
 import { badRequest, forbidden, ok, serverError } from '@/presentation/helpers/http/http-helper'
-import { Controller, HttpRequest, HttpResponse, Validation } from '@/presentation/protocols'
+import { AddUser, Authenticator, Controller, HttpRequest, HttpResponse, Validation } from './add-user-controller-protocols'
 
 export class AddUserController implements Controller {
   constructor (
