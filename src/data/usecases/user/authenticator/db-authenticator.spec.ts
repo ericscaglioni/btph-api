@@ -34,4 +34,11 @@ describe('Authenticator usecase', () => {
     const promise = sut.auth(mockAuthentication())
     await expect(promise).rejects.toThrow()
   })
+
+  it('Should return null if LoadAccountByEmailRepository returns null', async () => {
+    const { sut, loadUserByEmailRepositoryStub } = makeSut()
+    jest.spyOn(loadUserByEmailRepositoryStub, 'loadByEmail').mockReturnValueOnce(null)
+    const authenticatedUser = await sut.auth(mockAuthentication())
+    expect(authenticatedUser).toBeNull()
+  })
 })
