@@ -62,4 +62,11 @@ describe('Authenticator usecase', () => {
     const promise = sut.auth(mockAuthentication())
     await expect(promise).rejects.toThrow()
   })
+
+  it('Should return null if HashComparer returns false', async () => {
+    const { sut, hashComparerStub } = makeSut()
+    jest.spyOn(hashComparerStub, 'compare').mockResolvedValueOnce(false)
+    const accessToken = await sut.auth(mockAuthentication())
+    expect(accessToken).toBeNull()
+  })
 })
