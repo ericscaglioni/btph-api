@@ -1,8 +1,7 @@
-import { Encrypter, HashComparer } from '@/data/protocols/criptography'
-import { LoadUserByEmailRepository } from '@/data/protocols/db/user'
 import { mockEncrypter, mockHashComparer, mockLoadUserByEmailRepository } from '@/data/test'
 import { mockAuthentication, mockUser } from '@/domain/test'
 import { DbAuthenticator } from './db-authenticator'
+import { Encrypter, HashComparer, LoadUserByEmailRepository } from './db-authenticator-protocols'
 
 type SutTypes = {
   sut: DbAuthenticator
