@@ -1,12 +1,11 @@
 import { EmailInUseError } from '@/presentation/errors'
 import { badRequest, forbidden, ok, serverError } from '@/presentation/helpers/http/http-helper'
-import { AddUser, Authenticator, Controller, HttpRequest, HttpResponse, Validation } from './add-user-controller-protocols'
+import { AddUser, Controller, HttpRequest, HttpResponse, Validation } from './add-user-controller-protocols'
 
 export class AddUserController implements Controller {
   constructor (
     private readonly validation: Validation,
-    private readonly addUser: AddUser,
-    private readonly authenticator: Authenticator
+    private readonly addUser: AddUser
   ) {}
 
   async handle (httpRequest: HttpRequest): Promise<HttpResponse> {
@@ -21,14 +20,7 @@ export class AddUserController implements Controller {
         email,
         password
       })
-      if (!user) {
-        return forbidden(new EmailInUseError())
-      }
-      const authenticatedUser = await this.authenticator.auth({
-        email,
-        password
-      })
-      return ok(authenticatedUser)
+      return user ? ok(user) : forbidden(new EmailInUseError())
     } catch (error) {
       return serverError(error)
     }

@@ -1,8 +1,6 @@
-import { AuthenticationModel } from '@/domain/models/authentication'
 import { UserModel } from '@/domain/models/user'
 import { mockUser } from '@/domain/test'
 import { AddUser, AddUserParams } from '@/domain/usecases/user/add-user'
-import { AuthenticationParams, Authenticator } from '@/domain/usecases/user/authenticator'
 import { LoadUserByToken } from '@/domain/usecases/user/load-user-by-token'
 
 export const mockLoadUserByToken = (): LoadUserByToken => {
@@ -21,16 +19,4 @@ export const mockAddUser = (): AddUser => {
     }
   }
   return new AddUserStub()
-}
-
-export const mockAuthenticator = (): Authenticator => {
-  class AuthenticatorStub implements Authenticator {
-    async auth (authentication: AuthenticationParams): Promise<AuthenticationModel> {
-      return {
-        accessToken: 'any_token',
-        name: 'any_name'
-      }
-    }
-  }
-  return new AuthenticatorStub()
 }
