@@ -20,7 +20,7 @@ const makeSut = (): SutTypes => {
   }
 }
 
-describe('DbLoadUserByToken usescase', () => {
+describe('Load user by token usescase', () => {
   it('Should call Decrypter with correct token', async () => {
     const { sut, decrypterStub } = makeSut()
     const decryptSpy = jest.spyOn(decrypterStub, 'decrypt')

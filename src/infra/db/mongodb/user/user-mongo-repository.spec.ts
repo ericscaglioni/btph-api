@@ -54,4 +54,23 @@ describe('User Mongo Repository', () => {
       expect(user).toBeTruthy()
     })
   })
+
+  describe('loadByEmail()', () => {
+    it('Should return an user on success', async () => {
+      const userParams = {
+        name: faker.name.firstName(),
+        email: faker.internet.email(),
+        password: faker.internet.password()
+      }
+      const res = await userCollection.insertOne(userParams)
+      const sut = makeSut()
+      const user = await sut.loadByEmail(userParams.email)
+      expect(user).toEqual({
+        id: res.ops[0]._id,
+        name: userParams.name,
+        email: userParams.email,
+        password: userParams.password
+      })
+    })
+  })
 })
