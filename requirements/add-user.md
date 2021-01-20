@@ -15,8 +15,8 @@
 
 1. ✔️ Retorna erro **404** se a API não existir
 2. ✔️ Retorna erro **401** se o token de acesso não for passado
-3. ❌ Retorna erro **400** se name, email, password ou passwordConfirmation não forem fornecidos pelo client
-4. ❌ Retorna erro **400** se password e passwordConfirmation não forem iguais
+3. ✔️ Retorna erro **400** se name, email, password ou passwordConfirmation não forem fornecidos pelo client
+4. ✔️ Retorna erro **400** se password e passwordConfirmation não forem iguais
 5. ❌ Retorna erro **400** se o campo email for um e-mail inválido
 6. ❌ Retorna erro **403** se o email fornecido já estiver em uso
 7. ❌ Retorna erro **500** se der erro ao tentar gerar uma senha criptografada
