@@ -72,5 +72,11 @@ describe('User Mongo Repository', () => {
         password: userParams.password
       })
     })
+
+    it('Should return null if user is not found', async () => {
+      const sut = makeSut()
+      const user = await sut.loadByEmail(faker.internet.email())
+      expect(user).toBeNull()
+    })
   })
 })

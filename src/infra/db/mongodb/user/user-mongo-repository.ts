@@ -20,6 +20,6 @@ export class UserMongoRepository implements LoadUserByIdRepository, AddUserRepos
   async loadByEmail (email: string): Promise<UserModel> {
     const userCollection = await MongoHelper.getCollection('users')
     const user = await userCollection.findOne({ email })
-    return MongoHelper.map(user)
+    return user && MongoHelper.map(user)
   }
 }
