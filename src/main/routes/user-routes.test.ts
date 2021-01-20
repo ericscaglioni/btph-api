@@ -83,5 +83,23 @@ describe('User routes', () => {
         })
         .expect(400)
     })
+
+    it('Should return 200 on success', async () => {
+      const accessToken = await makeAccessToken()
+      const password = faker.internet.password()
+      const email = faker.internet.email()
+      await request(app)
+        .post('/api/users')
+        .set('x-access-token', accessToken)
+        .send({
+          name: faker.name.firstName(),
+          email,
+          password,
+          passwordConfirmation: password
+        })
+        .expect(200)
+      const user = await userCollection.findOne({ email })
+      expect(user).toBeTruthy()
+    })
   })
 })
