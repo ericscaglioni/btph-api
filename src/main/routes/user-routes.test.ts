@@ -68,5 +68,20 @@ describe('User routes', () => {
         })
         .expect(400)
     })
+
+    it('Should return 400 if email is not valid', async () => {
+      const accessToken = await makeAccessToken()
+      const password = faker.internet.password()
+      await request(app)
+        .post('/api/users')
+        .set('x-access-token', accessToken)
+        .send({
+          name: faker.name.firstName(),
+          email: 'invalid_email',
+          password,
+          passwordConfirmation: password
+        })
+        .expect(400)
+    })
   })
 })
