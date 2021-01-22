@@ -1,6 +1,6 @@
-import { HashComparer } from '@/data/protocols/criptography'
+import { Encrypter, HashComparer } from '@/data/protocols/criptography'
 import { LoadUserByEmailRepository } from '@/data/protocols/db/user'
-import { mockHashComparer, mockLoadUserByEmailRepository } from '@/data/test'
+import { mockEncrypter, mockHashComparer, mockLoadUserByEmailRepository } from '@/data/test'
 import { AuthenticationParams } from '@/domain/usecases/user/authentication'
 import faker from 'faker'
 import { DbAuthentication } from './db-authentication'
@@ -17,16 +17,23 @@ type SutTypes = {
   sut: DbAuthentication
   loadUserByEmailRepositoryStub: LoadUserByEmailRepository
   hashComparerStub: HashComparer
+  encrypterStub: Encrypter
 }
 
 const makeSut = (): SutTypes => {
   const loadUserByEmailRepositoryStub = mockLoadUserByEmailRepository()
   const hashComparerStub = mockHashComparer()
-  const sut = new DbAuthentication(loadUserByEmailRepositoryStub, hashComparerStub)
+  const encrypterStub = mockEncrypter()
+  const sut = new DbAuthentication(
+    loadUserByEmailRepositoryStub,
+    hashComparerStub,
+    encrypterStub
+  )
   return {
     sut,
     loadUserByEmailRepositoryStub,
-    hashComparerStub
+    hashComparerStub,
+    encrypterStub
   }
 }
 
@@ -77,5 +84,12 @@ describe('Authentication usecase', () => {
     })
     const promise = sut.auth(mockAuthenticationParams())
     await expect(promise).rejects.toThrow()
+  })
+
+  it('Should call Encrypter with correct user id', async () => {
+    const { sut, encrypterStub } = makeSut()
+    const encryptSpy = jest.spyOn(encrypterStub, 'encrypt')
+    await sut.auth(mockAuthenticationParams())
+    expect(encryptSpy).toHaveBeenCalledWith('any_id')
   })
 })
