@@ -92,4 +92,13 @@ describe('Authentication usecase', () => {
     await sut.auth(mockAuthenticationParams())
     expect(encryptSpy).toHaveBeenCalledWith('any_id')
   })
+
+  it('Should throw if Encrypter throws', async () => {
+    const { sut, encrypterStub } = makeSut()
+    jest.spyOn(encrypterStub, 'encrypt').mockImplementationOnce(() => {
+      throw new Error()
+    })
+    const promise = sut.auth(mockAuthenticationParams())
+    await expect(promise).rejects.toThrow()
+  })
 })
