@@ -69,4 +69,13 @@ describe('Authentication usecase', () => {
     const authenticatedUser = await sut.auth(mockAuthenticationParams())
     expect(authenticatedUser).toBeNull()
   })
+
+  it('Should throw if HashComparer throws', async () => {
+    const { sut, hashComparerStub } = makeSut()
+    jest.spyOn(hashComparerStub, 'compare').mockImplementationOnce(() => {
+      throw new Error()
+    })
+    const promise = sut.auth(mockAuthenticationParams())
+    await expect(promise).rejects.toThrow()
+  })
 })
