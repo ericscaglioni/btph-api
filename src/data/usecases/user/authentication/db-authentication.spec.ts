@@ -62,4 +62,11 @@ describe('Authentication usecase', () => {
     await sut.auth(params)
     expect(compareSpy).toHaveBeenCalledWith(params.password, 'hashed_password')
   })
+
+  it('Should return null if HashComparer returns false', async () => {
+    const { sut, hashComparerStub } = makeSut()
+    jest.spyOn(hashComparerStub, 'compare').mockResolvedValueOnce(false)
+    const authenticatedUser = await sut.auth(mockAuthenticationParams())
+    expect(authenticatedUser).toBeNull()
+  })
 })
