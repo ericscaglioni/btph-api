@@ -101,4 +101,15 @@ describe('Authentication usecase', () => {
     const promise = sut.auth(mockAuthenticationParams())
     await expect(promise).rejects.toThrow()
   })
+
+  it('Should return an authenticated user on success', async () => {
+    const { sut } = makeSut()
+    const params = mockAuthenticationParams()
+    const authenticatedUser = await sut.auth(params)
+    expect(authenticatedUser).toEqual({
+      accessToken: 'any_token',
+      name: expect.any(String),
+      email: expect.any(String)
+    })
+  })
 })
