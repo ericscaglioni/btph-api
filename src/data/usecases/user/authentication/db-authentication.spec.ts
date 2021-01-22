@@ -1,9 +1,7 @@
-import { Encrypter, HashComparer } from '@/data/protocols/criptography'
-import { LoadUserByEmailRepository } from '@/data/protocols/db/user'
 import { mockEncrypter, mockHashComparer, mockLoadUserByEmailRepository } from '@/data/test'
-import { AuthenticationParams } from '@/domain/usecases/user/authentication'
 import faker from 'faker'
 import { DbAuthentication } from './db-authentication'
+import { AuthenticationParams, Encrypter, HashComparer, LoadUserByEmailRepository } from './db-authentication-protocols'
 
 const email = faker.internet.email()
 const password = faker.internet.password()

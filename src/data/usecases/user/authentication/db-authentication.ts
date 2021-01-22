@@ -1,7 +1,4 @@
-import { Encrypter, HashComparer } from '@/data/protocols/criptography'
-import { LoadUserByEmailRepository } from '@/data/protocols/db/user'
-import { AuthenticationModel } from '@/domain/models/authentication'
-import { Authentication, AuthenticationParams } from '@/domain/usecases/user/authentication'
+import { Authentication, AuthenticationModel, AuthenticationParams, Encrypter, HashComparer, LoadUserByEmailRepository } from './db-authentication-protocols'
 
 export class DbAuthentication implements Authentication {
   constructor (
