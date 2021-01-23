@@ -1,6 +1,6 @@
 {
   "name": "btph-messages-api",
-  "version": "4.0.0",
+  "version": "4.1.0",
   "description": "API de mensagens do quadro Both Teams Played Hard do blog de NBA, Bola Presa",
   "main": "index.js",
   "scripts": {
