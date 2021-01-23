@@ -1,7 +1,8 @@
+import { Authentication } from '@/domain/usecases/user/authentication'
 import { MissingParamError } from '@/presentation/errors'
 import { badRequest, serverError } from '@/presentation/helpers/http/http-helper'
 import { HttpRequest, Validation } from '@/presentation/protocols'
-import { mockValidation } from '@/presentation/test'
+import { mockAuthentication, mockValidation } from '@/presentation/test'
 import faker from 'faker'
 import { LoginController } from './login-controller'
 
@@ -18,14 +19,17 @@ const mockRequest = (): HttpRequest => ({
 type SutTypes = {
   sut: LoginController
   validationStub: Validation
+  authenticationStub: Authentication
 }
 
 const makeSut = (): SutTypes => {
   const validationStub = mockValidation()
-  const sut = new LoginController(validationStub)
+  const authenticationStub = mockAuthentication()
+  const sut = new LoginController(validationStub, authenticationStub)
   return {
     sut,
-    validationStub
+    validationStub,
+    authenticationStub
   }
 }
 
@@ -52,5 +56,13 @@ describe('Login Controller', () => {
     })
     const httpResponse = await sut.handle(mockRequest())
     expect(httpResponse).toEqual(serverError(new Error()))
+  })
+
+  it('Should call Authentication with correct data', async () => {
+    const { sut, authenticationStub } = makeSut()
+    const authSpy = jest.spyOn(authenticationStub, 'auth')
+    const httpRequest = mockRequest()
+    await sut.handle(httpRequest)
+    expect(authSpy).toHaveBeenCalledWith(httpRequest.body)
   })
 })
