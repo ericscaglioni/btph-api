@@ -1,9 +1,8 @@
-import { LogErrorRepository } from '@/data/protocols/db/log/log-error-repository'
 import { mockLogErrorRepository } from '@/data/test'
 import { mockUser } from '@/domain/test'
 import { ok, serverError } from '@/presentation/helpers/http/http-helper'
-import { Controller, HttpRequest, HttpResponse } from '@/presentation/protocols'
 import { LogControllerDecorator } from './log-controller-decorator'
+import { Controller, HttpRequest, HttpResponse, LogErrorRepository } from './log-controller-decorator-protocols'
 
 const makeFakeServerError = (): HttpResponse => {
   const fakeError = new Error()
