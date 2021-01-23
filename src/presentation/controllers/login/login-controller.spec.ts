@@ -1,10 +1,9 @@
-import { Authentication } from '@/domain/usecases/user/authentication'
 import { MissingParamError } from '@/presentation/errors'
 import { badRequest, ok, serverError, unauthorized } from '@/presentation/helpers/http/http-helper'
-import { HttpRequest, Validation } from '@/presentation/protocols'
 import { mockAuthentication, mockValidation } from '@/presentation/test'
 import faker from 'faker'
 import { LoginController } from './login-controller'
+import { Authentication, HttpRequest, Validation } from './login-controller-protocols'
 
 const email = faker.internet.email()
 const password = faker.internet.password()
