@@ -62,4 +62,15 @@ describe('LogController Decorator', () => {
     await sut.handle(mockHttpRequest())
     expect(logErrorSpy).toHaveBeenCalledWith('any_stack')
   })
+
+  it('Should return the same result of the Controller', async () => {
+    const { sut } = makeSut()
+    const httpResponse = await sut.handle(mockHttpRequest())
+    expect(httpResponse).toEqual(ok({
+      id: expect.any(String),
+      name: expect.any(String),
+      email: expect.any(String),
+      password: expect.any(String)
+    }))
+  })
 })
