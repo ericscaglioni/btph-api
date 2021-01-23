@@ -1,3 +1,4 @@
+import { makeLogControllerDecorator } from '@/main/factories/decorators/log-controller-decorator-factory'
 import { makeDbAddMessage } from '@/main/factories/usecases/message/add-message/db-add-message-factory'
 import { AddMessageController } from '@/presentation/controllers/message/add-message/add-message-controller'
 import { Controller } from '@/presentation/protocols'
@@ -8,5 +9,5 @@ export const makeAddMessageController = (): Controller => {
     makeDbAddMessage(),
     makeAddMessageValidation()
   )
-  return addMessageController
+  return makeLogControllerDecorator(addMessageController)
 }
