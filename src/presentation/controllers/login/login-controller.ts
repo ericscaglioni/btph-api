@@ -1,5 +1,5 @@
 import { Authentication } from '@/domain/usecases/user/authentication'
-import { badRequest, serverError, unauthorized } from '@/presentation/helpers/http/http-helper'
+import { badRequest, ok, serverError, unauthorized } from '@/presentation/helpers/http/http-helper'
 import { Controller, HttpRequest, HttpResponse, Validation } from '@/presentation/protocols'
 
 export class LoginController implements Controller {
@@ -22,7 +22,7 @@ export class LoginController implements Controller {
       if (!authenticatedUser) {
         return unauthorized()
       }
-      return null
+      return ok(authenticatedUser)
     } catch (error) {
       return serverError(error)
     }

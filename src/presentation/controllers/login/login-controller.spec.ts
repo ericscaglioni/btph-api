@@ -1,6 +1,6 @@
 import { Authentication } from '@/domain/usecases/user/authentication'
 import { MissingParamError } from '@/presentation/errors'
-import { badRequest, serverError, unauthorized } from '@/presentation/helpers/http/http-helper'
+import { badRequest, ok, serverError, unauthorized } from '@/presentation/helpers/http/http-helper'
 import { HttpRequest, Validation } from '@/presentation/protocols'
 import { mockAuthentication, mockValidation } from '@/presentation/test'
 import faker from 'faker'
@@ -80,5 +80,15 @@ describe('Login Controller', () => {
     })
     const httpResponse = await sut.handle(mockRequest())
     expect(httpResponse).toEqual(serverError(new Error()))
+  })
+
+  it('Should return 200 on success', async () => {
+    const { sut } = makeSut()
+    const httpResponse = await sut.handle(mockRequest())
+    expect(httpResponse).toEqual(ok({
+      accessToken: 'any_token',
+      name: 'any_name',
+      email: 'any_email@email.com'
+    }))
   })
 })
