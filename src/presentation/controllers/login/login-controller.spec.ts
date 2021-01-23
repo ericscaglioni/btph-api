@@ -1,6 +1,6 @@
 import { Authentication } from '@/domain/usecases/user/authentication'
 import { MissingParamError } from '@/presentation/errors'
-import { badRequest, serverError } from '@/presentation/helpers/http/http-helper'
+import { badRequest, serverError, unauthorized } from '@/presentation/helpers/http/http-helper'
 import { HttpRequest, Validation } from '@/presentation/protocols'
 import { mockAuthentication, mockValidation } from '@/presentation/test'
 import faker from 'faker'
@@ -64,5 +64,12 @@ describe('Login Controller', () => {
     const httpRequest = mockRequest()
     await sut.handle(httpRequest)
     expect(authSpy).toHaveBeenCalledWith(httpRequest.body)
+  })
+
+  it('Should return 401 if Authentication returns null', async () => {
+    const { sut, authenticationStub } = makeSut()
+    jest.spyOn(authenticationStub, 'auth').mockResolvedValueOnce(null)
+    const httpResponse = await sut.handle(mockRequest())
+    expect(httpResponse).toEqual(unauthorized())
   })
 })
